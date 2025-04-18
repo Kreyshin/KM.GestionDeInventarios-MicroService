@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="4.2.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\Maestros\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GI.Aplicacion\GI.Aplicacion.csproj" />
+    <ProjectReference Include="..\GI.Infraestructura\GI.Infraestructura.csproj" />
+    <ProjectReference Include="..\GI.Logging\GI.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
