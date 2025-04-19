@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Comunes\" />
-    <Folder Include="Configuracion\" />
-    <Folder Include="Repositorios\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
@@ -26,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GI.Dominion\GI.Dominion.csproj" />
+    <ProjectReference Include="..\GI.Dominion\GI.Dominio.csproj" />
   </ItemGroup>
 
 </Project>
