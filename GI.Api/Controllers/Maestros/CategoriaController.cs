@@ -70,7 +70,7 @@ namespace GI.Api.Controllers.Maestros
         {
             if (oRegistro == null)
             {
-                return BadRequest(new { type = "InvalidInput", message = "El registro no puede ser nulo." });
+                return BadRequest(new { StatusType = "InvalidInput", StatusMessage = "El registro no puede ser nulo." });
             }
 
             var oResult = await _categoriaCrudCU.Actualizar(id, oRegistro);
