@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Maestros\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GI.Aplicacion\GI.Aplicacion.csproj" />
     <ProjectReference Include="..\GI.Infraestructura\GI.Infraestructura.csproj" />
     <ProjectReference Include="..\GI.Logging\GI.Logging.csproj" />
