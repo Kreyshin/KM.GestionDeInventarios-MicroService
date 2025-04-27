@@ -8,7 +8,7 @@ namespace GI.Dominio.Entidades
 {
     public class TipoAlmacenEN
     {
-        public string ID { get; set; }
+        public int ID { get; set; }
         public string C_Nombre { get; set; }
         public string C_Descripcion { get; set; }
         public bool B_Activo { get; set; }
@@ -17,6 +17,8 @@ namespace GI.Dominio.Entidades
         public DateTime? D_Fecha_Creacion { get; set; }
         public string C_Usuario_Modificacion { get; set; }
         public DateTime? D_Fecha_Modificacion { get; set; }
+
+        public string C_Estado { get; set; }
 
     }
 }

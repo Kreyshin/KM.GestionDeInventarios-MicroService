@@ -1,6 +1,8 @@
 ﻿using GI.Aplicacion.Funcionalidades.Categoria.CasosUso;
 using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
 using GI.Aplicacion.Funcionalidades.Categoria.Mappers;
+using GI.Aplicacion.Funcionalidades.TipoAlmacen.CasosUso;
+using GI.Aplicacion.Funcionalidades.TipoAlmacen.Interfaces;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,6 +20,7 @@ namespace GI.Aplicacion.Configuracion
             services.AddScoped<IAuditoriaHelp, AuditoriaHelp>();
             services.AddSingleton<IJwtService, JwtService>();
             services.AddScoped<ICategoriaCrudCU, CategoriaCrudCU>();
+            services.AddScoped<ITipoAlmacenCrudCU, TipoAlmacenCrudCU>();
 
 
             services.AddAutoMapper(

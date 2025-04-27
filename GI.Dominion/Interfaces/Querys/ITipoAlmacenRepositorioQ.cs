@@ -10,7 +10,7 @@ namespace GI.Dominio.Interfaces.Querys
 {
     public interface ITipoAlmacenRepositorioQ
     {
-        public Task<ListResponse<List<TipoAlmacenEN>>> Listar();
-        public Task<SingleResponse<TipoAlmacenEN>> BuscarPorID(string id);
+        public Task<ListResponse<List<TipoAlmacenEN>>> Consultar(TipoAlmacenEN oFiltros);
+        public Task<SingleResponse<TipoAlmacenEN>> BuscarPorID(int id);
     }
 }
