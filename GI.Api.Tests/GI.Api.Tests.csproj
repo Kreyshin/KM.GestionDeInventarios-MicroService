@@ -22,8 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Aplicacion\Funcionalidades\" />
     <Folder Include="Servicios\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GI.Aplicacion\GI.Aplicacion.csproj" />
   </ItemGroup>
 
 </Project>
