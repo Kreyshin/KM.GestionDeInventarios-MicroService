@@ -21,6 +21,7 @@ namespace GI.Infraestructura.Comunes
             {
                 if (item.Key.Substring(0, 1) == "O")
                 {
+                  
                     var valor = JObject.Parse(JsonConvert.SerializeObject(item.Value, Formatting.Indented));
                     DbType type = DbType.String;
                     switch (valor.GetValue("type").ToString())
@@ -37,19 +38,23 @@ namespace GI.Infraestructura.Comunes
                     var keyParam = item.Key;
                     var token = item.Value;
 
-                    if (keyParam.StartsWith("IID"))
+                    if( token.Type != JTokenType.Null)
                     {
-                        var valor = token.Type == JTokenType.Null ? (object)DBNull.Value : token.Value<int>();
-                        dynamicParameters.Add($"@{keyParam}", value: valor, DbType.Int32, ParameterDirection.Input);
-                    }else if (keyParam.StartsWith("IB"))
-                    {
-                        var valor = token.Type == JTokenType.Null ? (object)DBNull.Value : token.Value<bool?>();
-                        dynamicParameters.Add($"@{keyParam}", value: valor, DbType.Boolean, ParameterDirection.Input);
-                    }else if (keyParam.StartsWith("IC"))
-                    {
-                        var valor = token.Type == JTokenType.Null ? (object)DBNull.Value : token.Value<string>();
-                        dynamicParameters.Add($"@{keyParam}", value: valor, DbType.String, ParameterDirection.Input);
+                        if (keyParam.StartsWith("IID"))
+                        {
+                            dynamicParameters.Add($"@{keyParam}", value: token.Value<int>(), DbType.Int32, ParameterDirection.Input);
+                        }
+                        else if (keyParam.StartsWith("IB"))
+                        {
+                            dynamicParameters.Add($"@{keyParam}", value: token.Value<bool?>(), DbType.Boolean, ParameterDirection.Input);
+                        }
+                        else if (keyParam.StartsWith("IC"))
+                        {
+                            dynamicParameters.Add($"@{keyParam}", value: token.Value<string>(), DbType.String, ParameterDirection.Input);
+                        }
                     }
+
+                    
 
                 }
             }
