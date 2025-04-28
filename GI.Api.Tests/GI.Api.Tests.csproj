@@ -22,11 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Servicios\" />
+    <ProjectReference Include="..\GI.Aplicacion\GI.Aplicacion.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GI.Aplicacion\GI.Aplicacion.csproj" />
+    <Folder Include="Servicios\" />
   </ItemGroup>
 
 </Project>

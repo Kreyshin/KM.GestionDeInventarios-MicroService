@@ -16,6 +16,8 @@ namespace GI.Infraestructura.Configuracion
             services.AddScoped<ICategoriaRepositorioQ, CategoriaRepositoryQ>();
             services.AddScoped<ITipoAlmacenRepositorioQ, TipoAlmacenRepositoryQ>();
             services.AddScoped<ITipoAlmacenRepositorioC, TipoAlmacenRepositoryC>();
+            services.AddScoped<IUnidadMedidaRepositorioQ, UnidadMedidaRepositoryQ>();
+            services.AddScoped<IUnidadMedidaRepositorioC, UnidadMedidaRepositoryC>();
             return services;
         }
     }

@@ -1,9 +1,14 @@
 ﻿using GI.Aplicacion.Funcionalidades.Categoria.CasosUso;
 using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
 using GI.Aplicacion.Funcionalidades.Categoria.Mappers;
+
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Mappers;
+
+using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.CasosUso;
+using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Mappers;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,11 +22,13 @@ namespace GI.Aplicacion.Configuracion
             services.AddSingleton<IJwtService, JwtService>();
             services.AddScoped<ICategoriaCrudCU, CategoriaCrudCU>();
             services.AddScoped<ITipoAlmacenCrudCU, TipoAlmacenCrudCU>();
+            services.AddScoped<IUnidadMedidaCrudCU, UnidadMedidaCrudCU>();
 
 
             services.AddAutoMapper(
                    typeof(CategoriaCrudProfileAM).Assembly,
-                   typeof(TipoAlmacenCrudProfileAM).Assembly
+                   typeof(TipoAlmacenCrudProfileAM).Assembly,
+                   typeof(UnidadMedidaCrudProfileAM).Assembly
                );
             return services;
         }
