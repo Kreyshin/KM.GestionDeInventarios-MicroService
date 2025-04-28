@@ -1,26 +1,26 @@
-﻿using GI.Aplicacion.Funcionalidades.Categoria.Dtos.Request;
-using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
+﻿using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Dtos.Request;
+using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GI.Api.Controllers.Maestros
 {
     [Route("v1/GestionInventarios/[controller]")]
     [ApiController]
-    public class CategoriaController : ControllerBase
+    public class UnidadMedidaController : ControllerBase
     {
-        private readonly ICategoriaCrudCU _categoriaCrudCU;
+        private readonly IUnidadMedidaCrudCU _UnidadMedidaCrudCU;
 
-        public CategoriaController(ICategoriaCrudCU categoriaCrudCU)
+        public UnidadMedidaController(IUnidadMedidaCrudCU UnidadMedidaCrudCU)
         {
-            _categoriaCrudCU = categoriaCrudCU;
+            _UnidadMedidaCrudCU = UnidadMedidaCrudCU;
         }
 
         #region Querys
         [HttpGet("")]
-        public async Task<IActionResult> Consultar(CategoriaConsultarRQ oFiltro)
+        public async Task<IActionResult> Consultar(UnidadMedidaConsultarRQ oFiltro)
         {
 
-            var oResult = await _categoriaCrudCU.Consultar(oFiltro);
+            var oResult = await _UnidadMedidaCrudCU.Consultar(oFiltro);
 
             return oResult.StatusCode switch
             {
@@ -33,7 +33,7 @@ namespace GI.Api.Controllers.Maestros
         [HttpGet("{id:int}")]
         public async Task<IActionResult> BuscarPorID(int id)
         {
-            var oResult = await _categoriaCrudCU.BuscarPorID(id);
+            var oResult = await _UnidadMedidaCrudCU.BuscarPorID(id);
 
             return oResult.StatusCode switch
             {
@@ -47,14 +47,14 @@ namespace GI.Api.Controllers.Maestros
         #region Commands
 
         [HttpPost("")]
-        public async Task<IActionResult> Crear(CategoriaCrearRQ oRegistro)
+        public async Task<IActionResult> Crear(UnidadMedidaCrearRQ oRegistro)
         {
             if (oRegistro == null)
             {
                 return BadRequest(new { StatusType = "InvalidInput", StatusMessage = "El cuerpo de la peticion no puede ser nulo." });
             }
 
-            var oResult = await _categoriaCrudCU.Crear(oRegistro);
+            var oResult = await _UnidadMedidaCrudCU.Crear(oRegistro);
 
             return oResult.StatusCode switch
             {
@@ -65,14 +65,14 @@ namespace GI.Api.Controllers.Maestros
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Actualizar(int id, CategoriaActualizarRQ oRegistro)
+        public async Task<IActionResult> Actualizar(int id, UnidadMedidaActualizarRQ oRegistro)
         {
             if (oRegistro == null)
             {
                 return BadRequest(new { StatusType = "InvalidInput", StatusMessage = "El registro no puede ser nulo." });
             }
 
-            var oResult = await _categoriaCrudCU.Actualizar(id, oRegistro);
+            var oResult = await _UnidadMedidaCrudCU.Actualizar(id, oRegistro);
 
             return oResult.StatusCode switch
             {
@@ -87,7 +87,7 @@ namespace GI.Api.Controllers.Maestros
         public async Task<IActionResult> Eliminar(int id)
         {
 
-            var oResult = await _categoriaCrudCU.Eliminar(id);
+            var oResult = await _UnidadMedidaCrudCU.Eliminar(id);
 
             return oResult.StatusCode switch
             {
