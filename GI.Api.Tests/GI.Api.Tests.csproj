@@ -21,4 +21,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Aplicacion\Funcionalidades\" />
+    <Folder Include="Servicios\" />
+  </ItemGroup>
+
 </Project>

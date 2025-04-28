@@ -1,21 +1,15 @@
 ﻿using AutoMapper;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.CasosUso;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.Dtos.Request;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.Dtos.Response;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Response;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
 using GI.Dominio.Comunes;
 using GI.Dominio.Entidades;
 using GI.Dominio.Interfaces.Commands;
 using GI.Dominio.Interfaces.Querys;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GI.Aplicacion.Funcionalidades.TipoAlmacen.CasosUso
+namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
 {
     public class TipoAlmacenCrudCU(
           ITipoAlmacenRepositorioQ TipoAlmacenRepositoryQ,

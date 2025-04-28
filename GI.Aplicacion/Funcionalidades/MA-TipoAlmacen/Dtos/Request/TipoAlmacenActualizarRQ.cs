@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GI.Aplicacion.Funcionalidades.TipoAlmacen.Dtos.Request
+﻿namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request
 {
     public class TipoAlmacenActualizarRQ
     {

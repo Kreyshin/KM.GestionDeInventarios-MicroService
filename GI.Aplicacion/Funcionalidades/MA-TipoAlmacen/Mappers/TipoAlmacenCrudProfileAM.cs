@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.Dtos.Request;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.Dtos.Response;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Response;
 using GI.Dominio.Entidades;
 
-namespace GI.Aplicacion.Funcionalidades.TipoAlmacen.Mappers
+namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Mappers
 {
     public class TipoAlmacenCrudProfileAM : Profile
     {

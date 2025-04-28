@@ -1,15 +1,11 @@
 ﻿using GI.Aplicacion.Funcionalidades.Categoria.CasosUso;
 using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
 using GI.Aplicacion.Funcionalidades.Categoria.Mappers;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.CasosUso;
-using GI.Aplicacion.Funcionalidades.TipoAlmacen.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Mappers;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GI.Aplicacion.Configuracion
 {
@@ -24,7 +20,8 @@ namespace GI.Aplicacion.Configuracion
 
 
             services.AddAutoMapper(
-                   typeof(CategoriaCrudProfileAM).Assembly
+                   typeof(CategoriaCrudProfileAM).Assembly,
+                   typeof(TipoAlmacenCrudProfileAM).Assembly
                );
             return services;
         }

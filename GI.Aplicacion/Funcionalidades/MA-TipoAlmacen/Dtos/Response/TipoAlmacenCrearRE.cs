@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GI.Aplicacion.Funcionalidades.TipoAlmacen.Dtos.Response
+﻿namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Response
 {
     public class TipoAlmacenCrearRE
     {
