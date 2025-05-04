@@ -1,0 +1,9 @@
+﻿namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request
+{
+    public class TipoAlmacenActualizarRQ
+    {
+        public string? nombre { set; get; }
+        public string? descripcion { set; get; }
+        public bool? activo { get; set; }
+    }
+}
