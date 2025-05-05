@@ -1,7 +1,9 @@
 ﻿using GI.Aplicacion.Funcionalidades.Categoria.CasosUso;
 using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
 using GI.Aplicacion.Funcionalidades.Categoria.Mappers;
-
+using GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso;
+using GI.Aplicacion.Funcionalidades.MA_Marca.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_Marca.Mappers;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Mappers;
@@ -23,12 +25,14 @@ namespace GI.Aplicacion.Configuracion
             services.AddScoped<ICategoriaCrudCU, CategoriaCrudCU>();
             services.AddScoped<ITipoAlmacenCrudCU, TipoAlmacenCrudCU>();
             services.AddScoped<IUnidadMedidaCrudCU, UnidadMedidaCrudCU>();
+            services.AddScoped<IMarcaCrudCU, MarcaCrudCU>();
 
 
             services.AddAutoMapper(
                    typeof(CategoriaCrudProfileAM).Assembly,
                    typeof(TipoAlmacenCrudProfileAM).Assembly,
-                   typeof(UnidadMedidaCrudProfileAM).Assembly
+                   typeof(UnidadMedidaCrudProfileAM).Assembly,
+                   typeof(MarcaCrudProfileAM).Assembly
                );
             return services;
         }
