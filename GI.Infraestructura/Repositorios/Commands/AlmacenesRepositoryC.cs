@@ -15,33 +15,39 @@ using System.Threading.Tasks;
 
 namespace GI.Infraestructura.Repositorios.Commands
 {
-    public class UnidadMedidaRepositoryC(DbConexion dbConexion, ILogger<UnidadMedidaRepositoryC> logger) : IUnidadMedidaRepositorioC
+    public class AlmacenesRepositoryC(DbConexion dbConexion, ILogger<AlmacenesRepositoryC> logger) : IAlmacenesRepositorioC
     {
         private readonly DbConexion _dbConexion = dbConexion;
-        private readonly ILogger<UnidadMedidaRepositoryC> _logger = logger;
+        private readonly ILogger<AlmacenesRepositoryC> _logger = logger;
 
-        public async Task<SingleResponse<UnidadMedidaEN>> Actualizar(UnidadMedidaEN oUnidadMedida)
+
+        public async Task<SingleResponse<AlmacenEN>> Crear(AlmacenEN oAlmacen)
         {
-            if (oUnidadMedida == null)
+            if (oAlmacen == null)
             {
-                throw new ArgumentNullException(nameof(oUnidadMedida));
+                throw new ArgumentNullException(nameof(oAlmacen));
             }
 
-            var oResp = new SingleResponse<UnidadMedidaEN>();
+            var oResp = new SingleResponse<AlmacenEN>();
 
             DynamicParameters objParam = Utilitarios.GenerarParametros(new
             {
-                IID  = oUnidadMedida.ID,
-                IC_Nombre = oUnidadMedida.C_Nombre,
-                IB_Activo = oUnidadMedida.B_Activo,
-                IC_Usuario_Modificacion = oUnidadMedida.C_Usuario_Modificacion
+                IC_Codigo = oAlmacen.C_Codigo,
+                IC_Nombre = oAlmacen.C_Nombre,
+                IC_Direccion = oAlmacen.C_Direccion,
+                IID_TipoAlmacen = oAlmacen.ID_TipoAlmacen,
+                IC_Ubigeo = oAlmacen.C_Ubigeo,
+                IC_Telefono = oAlmacen.C_Telefono,
+                IC_Latitud = oAlmacen.C_Latitud,
+                IC_Longitud = oAlmacen.C_Longitud,
+                IC_Usuario_Creacion = oAlmacen.C_Usuario_Creacion
             });
 
             try
             {
                 using var connection = _dbConexion.CrearConexion;
-                oResp.Data = await connection.QuerySingleAsync<UnidadMedidaEN>(
-                         sql: "Sp_UnidadMedidaC_Actualizar",
+                oResp.Data = await connection.QuerySingleAsync<AlmacenEN>(
+                         sql: "Sp_AlmacenesC_Crear",
                          commandType: CommandType.StoredProcedure,
                          param: objParam
                        );
@@ -59,7 +65,7 @@ namespace GI.Infraestructura.Repositorios.Commands
                 else
                 {
                     // Es un error real de SQL
-                    _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al actualizar una Unidad de Medida.", exsql.Number);
+                    _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al crear un Almacen.", exsql.Number);
                     oResp.ErrorCode = exsql.Number;
                     oResp.ErrorMessage = "Error de base de datos, contactar con el administrador del sistema.";
                     oResp.StatusType = "SQL-ERROR";
@@ -67,62 +73,7 @@ namespace GI.Infraestructura.Repositorios.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al actualizar una Unidad de Medida.");
-                oResp.ErrorCode = 50100;
-                oResp.ErrorMessage = "Error de BackEnd, comunicarse con el encargado de este microservicio.";
-                oResp.StatusType = "BACKEND-ERROR";
-            }
-
-            return oResp;
-        }
-
-        public async Task<SingleResponse<UnidadMedidaEN>> Crear(UnidadMedidaEN oUnidadMedida)
-        {
-            if (oUnidadMedida == null)
-            {
-                throw new ArgumentNullException(nameof(oUnidadMedida));
-            }
-
-            var oResp = new SingleResponse<UnidadMedidaEN>();
-
-            DynamicParameters objParam = Utilitarios.GenerarParametros(new
-            {
-                IC_Nombre = oUnidadMedida.C_Nombre,
-                IC_Codigo = oUnidadMedida.C_Codigo,
-                IC_Usuario_Creacion = oUnidadMedida.C_Usuario_Creacion
-            });
-
-            try
-            {
-                using var connection = _dbConexion.CrearConexion;
-                oResp.Data = await connection.QuerySingleAsync<UnidadMedidaEN>(
-                         sql: "Sp_UnidadMedidaC_Crear",
-                         commandType: CommandType.StoredProcedure,
-                         param: objParam
-                       );
-            }
-            catch (SqlException exsql)
-            {
-                if (exsql.Number == 50001)
-                {
-                    // Es un mensaje de validación del SP, no un error crítico
-                    _logger.LogWarning("Validación de negocio: {Mensaje}", exsql.Message);
-                    oResp.ErrorCode = 50001;
-                    oResp.StatusMessage = exsql.Message;
-                    oResp.StatusType = "VALIDACION";
-                }
-                else
-                {
-                    // Es un error real de SQL
-                    _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al crear una Unidad de Medida.", exsql.Number);
-                    oResp.ErrorCode = exsql.Number;
-                    oResp.ErrorMessage = "Error de base de datos, contactar con el administrador del sistema.";
-                    oResp.StatusType = "SQL-ERROR";
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al crear una Unidad de Medida.");
+                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al crear un Almacen.");
                 oResp.ErrorCode = 50100;
                 oResp.ErrorMessage = "Error de BackEnd, comunicarse con el encargado de este microservicio.";
                 oResp.StatusType = "BACKEND-ERROR";
@@ -143,7 +94,7 @@ namespace GI.Infraestructura.Repositorios.Commands
             {
                 using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.ExecuteAsync(
-                         sql: "Sp_UnidadMedidaC_Eliminar",
+                         sql: "Sp_AlmacenesC_Eliminar",
                          commandType: CommandType.StoredProcedure,
                          param: objParam
                        );
@@ -161,7 +112,7 @@ namespace GI.Infraestructura.Repositorios.Commands
                 else
                 {
                     // Es un error real de SQL
-                    _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al eliminar una Unidad de Medida.", exsql.Number);
+                    _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al eliminar un Almacen.", exsql.Number);
                     oResp.ErrorCode = exsql.Number;
                     oResp.ErrorMessage = "Error de base de datos, contactar con el administrador del sistema.";
                     oResp.StatusType = "SQL-ERROR";
@@ -169,7 +120,70 @@ namespace GI.Infraestructura.Repositorios.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al eliminar una Unidad de Medida.");
+                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al eliminar un Almacen.");
+                oResp.ErrorCode = 50100;
+                oResp.ErrorMessage = "Error de BackEnd, comunicarse con el encargado de este microservicio.";
+                oResp.StatusType = "BACKEND-ERROR";
+            }
+
+            return oResp;
+        }
+
+        public async Task<SingleResponse<AlmacenEN>> Actualizar(AlmacenEN oAlmacen)
+        {
+            if (oAlmacen == null)
+            {
+                throw new ArgumentNullException(nameof(oAlmacen));
+            }
+
+            var oResp = new SingleResponse<AlmacenEN>();
+
+            DynamicParameters objParam = Utilitarios.GenerarParametros(new
+            {
+                IID = oAlmacen.ID,
+                IC_Nombre = oAlmacen.C_Nombre,
+                IC_Direccion = oAlmacen.C_Direccion,
+                IID_TipoAlmacen = oAlmacen.ID_TipoAlmacen,
+                IID_Estado = oAlmacen.ID_Estado,
+                IC_Ubigeo = oAlmacen.C_Ubigeo,
+                IC_Telefono = oAlmacen.C_Telefono,
+                IC_Latitud = oAlmacen.C_Latitud,
+                IC_Longitud = oAlmacen.C_Longitud,
+
+                IC_Usuario_Modificacion = oAlmacen.C_Usuario_Modificacion
+            });
+
+            try
+            {
+                using var connection = _dbConexion.CrearConexion;
+                oResp.Data = await connection.QuerySingleAsync<AlmacenEN>(
+                         sql: "Sp_AlmacenesC_Actualizar",
+                         commandType: CommandType.StoredProcedure,
+                         param: objParam
+                       );
+            }
+            catch (SqlException exsql)
+            {
+                if (exsql.Number == 50001)
+                {
+                    // Es un mensaje de validación del SP, no un error crítico
+                    _logger.LogWarning("Validación de negocio: {Mensaje}", exsql.Message);
+                    oResp.ErrorCode = 50001;
+                    oResp.StatusMessage = exsql.Message;
+                    oResp.StatusType = "VALIDACION";
+                }
+                else
+                {
+                    // Es un error real de SQL
+                    _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al actualizar un Almacen.", exsql.Number);
+                    oResp.ErrorCode = exsql.Number;
+                    oResp.ErrorMessage = "Error de base de datos, contactar con el administrador del sistema.";
+                    oResp.StatusType = "SQL-ERROR";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al actualizar un Almacen.");
                 oResp.ErrorCode = 50100;
                 oResp.ErrorMessage = "Error de BackEnd, comunicarse con el encargado de este microservicio.";
                 oResp.StatusType = "BACKEND-ERROR";

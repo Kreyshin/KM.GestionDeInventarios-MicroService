@@ -6,18 +6,23 @@ using GI.Infraestructura.Comunes;
 using GI.Infraestructura.Persistencia;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GI.Infraestructura.Repositorios.Querys
 {
-    public class TipoAlmacenRepositoryQ(DbConexion dbConexion, ILogger<TipoAlmacenRepositoryQ> logger) : ITipoAlmacenRepositorioQ
+    public class AlmacenesRepositoryQ(DbConexion dbConexion, ILogger<AlmacenesRepositoryQ> logger) : IAlmacenesRepositorioQ
     {
         private readonly DbConexion _dbConexion = dbConexion;
-        private readonly ILogger<TipoAlmacenRepositoryQ> _logger = logger;
+        private readonly ILogger<AlmacenesRepositoryQ> _logger = logger;
 
-        public async Task<SingleResponse<TipoAlmacenEN>> BuscarPorID(int id)
+        public async Task<SingleResponse<AlmacenEN>> BuscarPorID(int id)
         {
-            SingleResponse<TipoAlmacenEN> oResp = new();
+            SingleResponse<AlmacenEN> oResp = new();
             DynamicParameters parametros = Utilitarios.GenerarParametros(new
             {
                 IID = id,
@@ -26,15 +31,15 @@ namespace GI.Infraestructura.Repositorios.Querys
             try
             {
                 IDbConnection connection = _dbConexion.CrearConexion;
-                oResp.Data = await connection.QueryFirstOrDefaultAsync<TipoAlmacenEN>(
-                    sql: "Sp_TipoAlmacenQ_BuscarPorID",
+                oResp.Data = await connection.QueryFirstOrDefaultAsync<AlmacenEN>(
+                    sql: "Sp_AlmacenesQ_BuscarPorID",
                     commandType: CommandType.StoredProcedure,
                     param: parametros
                 );
             }
             catch (SqlException exsql)
             {
-                _logger.LogError(exsql, "Ocurrio un exepcion(Sql) al intentar bucar la TipoAlmacen con ID: {id}", id);
+                _logger.LogError(exsql, "Ocurrio un exepcion(Sql) al intentar bucar el Almacen con ID: {id}", id);
                 oResp.ErrorCode = exsql.Number;
                 oResp.ErrorMessage = "Error de base de datos, contactar con el administrador del sistema.";
                 oResp.StatusType = "SQL-ERROR";
@@ -42,7 +47,7 @@ namespace GI.Infraestructura.Repositorios.Querys
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ocurrio un exepcion(c#) al intentar buscar la TipoAlmacen.");
+                _logger.LogError(ex, "Ocurrio un exepcion(c#) al intentar buscar el Almacen.");
                 oResp.ErrorCode = 50100;
                 oResp.ErrorMessage = "Error de BackEnd, comunicarse con el encargado de este microservicio.";
                 oResp.StatusType = "BACKEND-ERROR";
@@ -52,20 +57,22 @@ namespace GI.Infraestructura.Repositorios.Querys
             return oResp;
         }
 
-        public async Task<ListResponse<TipoAlmacenEN>> Consultar(TipoAlmacenEN flt)
+        public async Task<ListResponse<AlmacenEN>> Consultar(AlmacenEN flt)
         {
-            ListResponse<TipoAlmacenEN> oResp = new();
+            ListResponse<AlmacenEN> oResp = new();
             DynamicParameters parametros = Utilitarios.GenerarParametros(new
             {
+                IC_Codigo = flt.C_Codigo,
                 IC_Nombre = flt.C_Nombre,
-                IC_Descripcion = flt.C_Descripcion,
-                IC_Estado = flt.C_Estado,
+                IC_Direccion = flt.C_Direccion,
+                IID_TipoAlmacen = flt.ID_TipoAlmacen,
+                IID_Estado = flt.ID_Estado
             });
 
             try
             {
                 IDbConnection connection = _dbConexion.CrearConexion;
-                oResp.Data = await connection.QueryAsync<TipoAlmacenEN>(
+                oResp.Data = await connection.QueryAsync<AlmacenEN>(
                    sql: "Sp_TipoAlmacenQ_Consultar",
                    commandType: CommandType.StoredProcedure,
                    param: parametros

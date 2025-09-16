@@ -20,6 +20,8 @@ namespace GI.Infraestructura.Configuracion
             services.AddScoped<IUnidadMedidaRepositorioC, UnidadMedidaRepositoryC>();
             services.AddScoped<IMarcaRepositorioQ, MarcaRepositoryQ>();
             services.AddScoped<IMarcaRepositorioC, MarcaRepositoryC>();
+            services.AddScoped<IAlmacenesRepositorioC, AlmacenesRepositoryC>();
+            services.AddScoped<IAlmacenesRepositorioQ, AlmacenesRepositoryQ>();
             return services;
         }
     }

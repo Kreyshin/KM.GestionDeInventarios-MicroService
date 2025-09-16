@@ -10,6 +10,7 @@ namespace GI.Dominio.Entidades
     {
         public int ID { get; set; }
         public string? C_Nombre { get; set; } = string.Empty;
+        public string? C_Codigo { get; set; } = string.Empty;
         public bool? B_Activo { get; set; }
         public DateTime F_Fecha_Creacion { get; set; }
         public DateTime F_Fecha_Modificacion { get; set; }
