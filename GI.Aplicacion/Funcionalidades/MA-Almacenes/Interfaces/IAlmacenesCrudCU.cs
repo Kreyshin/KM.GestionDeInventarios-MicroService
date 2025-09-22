@@ -12,9 +12,9 @@ namespace GI.Aplicacion.Funcionalidades.MA_Almacenes.Interfaces
     public interface IAlmacenesCrudCU
     {
         public Task<SingleResponse<AlmacenCrearRE>> Crear(AlmacenCrearRQ almacen);
-        public Task<SingleResponse<AlmacenActualizarRE>> Actualizar(AlmacenActualizarRQ rq);
+        public Task<SingleResponse<AlmacenActualizarRE>> Actualizar(int id,AlmacenActualizarRQ oRegistro);
         public Task<SingleResponse<bool>> Eliminar(int id);
         public Task<SingleResponse<AlmacenBuscarPorIDRE>> BuscarPorID(int id);
-        public Task<SingleResponse<AlmacenConsultarRE>> Consultar(AlmacenConsultarRQ filtros);
+        public Task<ListResponse<AlmacenConsultarRE>> Consultar(AlmacenConsultarRQ filtros);
     }
 }
