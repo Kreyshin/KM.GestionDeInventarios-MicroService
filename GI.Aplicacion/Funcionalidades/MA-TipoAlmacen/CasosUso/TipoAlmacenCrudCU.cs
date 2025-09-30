@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GI.Aplicacion.Funcionalidades.MA_Marca.Dtos.Response;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Response;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
@@ -78,7 +77,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar actualizar la TipoAlmacen.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar actualizar el tipo de almacen.");
                 return new SingleResponse<TipoAlmacenActualizarRE>
                 {
                     StatusCode = 500,
@@ -126,7 +125,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar buscar TipoAlmacen por ID.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar buscar el tipo de almacen por ID.");
                 return new SingleResponse<TipoAlmacenBuscarPorIDRE>
                 {
                     StatusCode = 500,
@@ -248,7 +247,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar crear la TipoAlmacen.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar crear el tipo de almacen.");
                 return new SingleResponse<TipoAlmacenCrearRE>
                 {
                     StatusCode = 500,
@@ -296,7 +295,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar eliminar la TipoAlmacen.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar eliminar el tipo de almacen.");
                 return new SingleResponse<bool>
                 {
                     StatusCode = 500,
