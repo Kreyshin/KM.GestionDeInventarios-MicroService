@@ -9,6 +9,9 @@ using GI.Aplicacion.Funcionalidades.MA_Marca.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Interfaces;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Mappers;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Validadores;
+using GI.Aplicacion.Funcionalidades.MA_Productos.Dtos.Request;
+using GI.Aplicacion.Funcionalidades.MA_Productos.Mappers;
+using GI.Aplicacion.Funcionalidades.MA_Productos.Validadores;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
@@ -38,12 +41,14 @@ namespace GI.Aplicacion.Configuracion
             services.AddScoped<IValidator<CategoriaCrearRQ>, CateogoriaCrearRQValidator>();
             services.AddScoped<IValidator<MarcaCrearRQ>, MarcaCrearRQValidator>();
             services.AddScoped<IValidator<TipoAlmacenCrearRQ>, TipoAlmacenCrearRQValidator>();
+            services.AddScoped<IValidator<ProductoCrearRQ>, ProductoCrearRQValidator>();
 
             services.AddAutoMapper(
                    typeof(CategoriaCrudProfileAM).Assembly,
                    typeof(TipoAlmacenCrudProfileAM).Assembly,
                    typeof(UnidadMedidaCrudProfileAM).Assembly,
-                   typeof(MarcaCrudProfileAM).Assembly
+                   typeof(MarcaCrudProfileAM).Assembly,
+                   typeof(ProductosCrudProfileAM).Assembly
                );
             return services;
         }
