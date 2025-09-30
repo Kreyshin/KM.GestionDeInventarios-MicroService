@@ -22,6 +22,8 @@ namespace GI.Infraestructura.Configuracion
             services.AddScoped<IMarcaRepositorioC, MarcaRepositoryC>();
             services.AddScoped<IAlmacenesRepositorioC, AlmacenesRepositoryC>();
             services.AddScoped<IAlmacenesRepositorioQ, AlmacenesRepositoryQ>();
+            services.AddScoped<IProductosRepositorioC, ProductoRepositoryC>();
+            services.AddScoped<IProductosRepositorioQ, ProductoRepositoryQ>();
             return services;
         }
     }
