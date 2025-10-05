@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request;
-using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Response;
-using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_Productos.Dtos.Request;
+using GI.Aplicacion.Funcionalidades.MA_Productos.Dtos.Response;
+using GI.Aplicacion.Funcionalidades.MA_Productos.Interfaces;
 using GI.Dominio.Comunes;
 using GI.Dominio.Entidades;
 using GI.Dominio.Interfaces.Commands;
@@ -11,27 +11,28 @@ using GS.Aplicacion.Comunes.AuditoriaHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
+namespace GI.Aplicacion.Funcionalidades.MA_Productos.CasosUso
 {
-    public class TipoAlmacenCrudCU(
-          ITipoAlmacenRepositorioQ TipoAlmacenRepositoryQ,
-          ITipoAlmacenRepositorioC TipoAlmacenRepositoryC,
-          IMapper mapper,
-          ILogger<TipoAlmacenCrudCU> logger,
-          IAuditoriaHelp audiHelp,
-          IValidator<TipoAlmacenCrearRQ> validatorCrear
-          ) : ITipoAlmacenCrudCU
-        
+    public class ProductoCrudCU(
+        IProductosRepositorioQ productosRepositorioQ,
+        IProductosRepositorioC productosRepositorioC,
+        IMapper mapper,
+        ILogger<ProductoCrudCU> logger,
+        IAuditoriaHelp audiHelp,
+        IValidator<ProductoCrearRQ> validatorCrear
+
+        ) : IProductosCrudCU
     {
 
-        private readonly ITipoAlmacenRepositorioQ _TipoAlmacenRepoQ = TipoAlmacenRepositoryQ;
-        private readonly ITipoAlmacenRepositorioC _TipoAlmacenRepoC = TipoAlmacenRepositoryC;
+        private readonly IProductosRepositorioQ _productosRepoQ = productosRepositorioQ;
+        private readonly IProductosRepositorioC _productosRepoC = productosRepositorioC;
         private readonly IMapper _mapper = mapper;
-        private readonly ILogger<TipoAlmacenCrudCU> _logger = logger;
+        private readonly ILogger<ProductoCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
-        private readonly IValidator<TipoAlmacenCrearRQ> _validatorCrear = validatorCrear;
+        private readonly IValidator<ProductoCrearRQ> _validatorCrear = validatorCrear;
 
-        public async Task<SingleResponse<TipoAlmacenActualizarRE>> Actualizar(int id, TipoAlmacenActualizarRQ oRegistro)
+
+        public async Task<SingleResponse<ProductoActualizarRE>> Actualizar(int id, ProductoActualizarRQ oRegistro)
         {
             if (oRegistro == null)
             {
@@ -40,23 +41,23 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
 
             try
             {
-                var TipoAlmacenEn = _mapper.Map<TipoAlmacenEN>(oRegistro);
-                TipoAlmacenEn.ID = id;
-                TipoAlmacenEn.C_Usuario_Modificacion = _audiHelp.UserName;
-                var oRes = await _TipoAlmacenRepoC.Actualizar(TipoAlmacenEn);
+                var productoEN = _mapper.Map<ProductoEN>(oRegistro);
+                productoEN.ID = id;
+                productoEN.C_Usuario_Modificacion = _audiHelp.UserName;
+                var oRes = await _productosRepoC.Actualizar(productoEN);
 
                 if (oRes.ErrorCode == 0)
                 {
-                    return new SingleResponse<TipoAlmacenActualizarRE>
+                    return new SingleResponse<ProductoActualizarRE>
                     {
                         StatusCode = 200,
-                        Data = _mapper.Map<TipoAlmacenActualizarRE>(oRes.Data),
+                        Data = _mapper.Map<ProductoActualizarRE>(oRes.Data),
                         StatusType = "ÉXITO"
                     };
                 }
                 else if (oRes.ErrorCode == 50001)
                 {
-                    return new SingleResponse<TipoAlmacenActualizarRE>
+                    return new SingleResponse<ProductoActualizarRE>
                     {
                         StatusCode = 400,
                         Data = null,
@@ -66,7 +67,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
                 }
                 else
                 {
-                    return new SingleResponse<TipoAlmacenActualizarRE>
+                    return new SingleResponse<ProductoActualizarRE>
                     {
                         StatusCode = 500,
                         Data = null,
@@ -77,8 +78,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar actualizar el tipo de almacen.");
-                return new SingleResponse<TipoAlmacenActualizarRE>
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar actualizar el producto.");
+                return new SingleResponse<ProductoActualizarRE>
                 {
                     StatusCode = 500,
                     StatusType = "BACKEND-ERROR",
@@ -87,24 +88,24 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
         }
 
-        public async Task<SingleResponse<TipoAlmacenBuscarPorIDRE>> BuscarPorID(int id)
+        public async Task<SingleResponse<ProductoBuscarPorIDRE>> BuscarPorID(int id)
         {
             try
             {
-                var oRes = await _TipoAlmacenRepoQ.BuscarPorID(id);
+                var oRes = await _productosRepoQ.BuscarPorID(id);
 
                 if (oRes.ErrorCode == 0 && oRes.Data != null)
                 {
-                    return new SingleResponse<TipoAlmacenBuscarPorIDRE>
+                    return new SingleResponse<ProductoBuscarPorIDRE>
                     {
                         StatusCode = 200,
-                        Data = _mapper.Map<TipoAlmacenBuscarPorIDRE>(oRes.Data),
+                        Data = _mapper.Map<ProductoBuscarPorIDRE>(oRes.Data),
                         StatusType = "ÉXITO"
                     };
                 }
                 else if (oRes.ErrorCode == 0 && oRes.Data == null)
                 {
-                    return new SingleResponse<TipoAlmacenBuscarPorIDRE>
+                    return new SingleResponse<ProductoBuscarPorIDRE>
                     {
                         StatusCode = 204,
                         Data = null,
@@ -114,7 +115,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
                 }
                 else
                 {
-                    return new SingleResponse<TipoAlmacenBuscarPorIDRE>
+                    return new SingleResponse<ProductoBuscarPorIDRE>
                     {
                         StatusCode = 500,
                         Data = null,
@@ -125,8 +126,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar buscar el tipo de almacen por ID.");
-                return new SingleResponse<TipoAlmacenBuscarPorIDRE>
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar buscar el producto por ID.");
+                return new SingleResponse<ProductoBuscarPorIDRE>
                 {
                     StatusCode = 500,
                     StatusType = "BACKEND-ERROR",
@@ -135,7 +136,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
         }
 
-        public async Task<ListResponse<TipoAlmacenConsultarRE>> Consultar(TipoAlmacenConsultarRQ oFiltro)
+        public async Task<ListResponse<ProductoConsultarRE>> Consultar(ProductoConsultarRQ oFiltro)
         {
             if (oFiltro == null)
             {
@@ -144,22 +145,22 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
 
             try
             {
-                var TipoAlmacenEN = _mapper.Map<TipoAlmacenEN>(oFiltro);
+                var productoEN = _mapper.Map<ProductoEN>(oFiltro);
 
-                var oRes = await _TipoAlmacenRepoQ.Consultar(TipoAlmacenEN);
+                var oRes = await _productosRepoQ.Consultar(productoEN);
 
                 if (oRes.ErrorCode == 0 && oRes.Data.Count() > 0)
                 {
-                    return new ListResponse<TipoAlmacenConsultarRE>
+                    return new ListResponse<ProductoConsultarRE>
                     {
                         StatusCode = 200,
-                        Data = _mapper.Map<List<TipoAlmacenConsultarRE>>(oRes.Data),
+                        Data = _mapper.Map<List<ProductoConsultarRE>>(oRes.Data),
                         StatusType = "ÉXITO"
                     };
                 }
                 else if (oRes.ErrorCode == 0 && oRes.Data.Count() == 0)
                 {
-                    return new ListResponse<TipoAlmacenConsultarRE>
+                    return new ListResponse<ProductoConsultarRE>
                     {
                         StatusCode = 204,
                         Data = null!,
@@ -169,7 +170,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
                 }
                 else
                 {
-                    return new ListResponse<TipoAlmacenConsultarRE>
+                    return new ListResponse<ProductoConsultarRE>
                     {
                         StatusCode = 500,
                         Data = null!,
@@ -180,8 +181,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar consultar los TipoAlmacenes.");
-                return new ListResponse<TipoAlmacenConsultarRE>
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar consultar los productos.");
+                return new ListResponse<ProductoConsultarRE>
                 {
                     StatusCode = 500,
                     StatusType = "BACKEND-ERROR",
@@ -190,7 +191,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
         }
 
-        public async Task<SingleResponse<TipoAlmacenCrearRE>> Crear(TipoAlmacenCrearRQ oRegistro)
+        public async Task<SingleResponse<ProductoCrearRE>> Crear(ProductoCrearRQ oRegistro)
         {
             if (oRegistro == null)
             {
@@ -200,7 +201,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             var validationResult = await _validatorCrear.ValidateAsync(oRegistro);
             if (!validationResult.IsValid)
             {
-                return new SingleResponse<TipoAlmacenCrearRE>
+                return new SingleResponse<ProductoCrearRE>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Data = null,
@@ -211,22 +212,22 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
 
             try
             {
-                var TipoAlmacenEn = _mapper.Map<TipoAlmacenEN>(oRegistro);
-                TipoAlmacenEn.C_Usuario_Creacion = _audiHelp.UserName;
-                var oRes = await _TipoAlmacenRepoC.Crear(TipoAlmacenEn);
+                var productoEN = _mapper.Map<ProductoEN>(oRegistro);
+                productoEN.C_Usuario_Creacion = _audiHelp.UserName;
+                var oRes = await _productosRepoC.Crear(productoEN);
 
                 if (oRes.ErrorCode == 0)
                 {
-                    return new SingleResponse<TipoAlmacenCrearRE>
+                    return new SingleResponse<ProductoCrearRE>
                     {
                         StatusCode = 200,
-                        Data = _mapper.Map<TipoAlmacenCrearRE>(oRes.Data),
+                        Data = _mapper.Map<ProductoCrearRE>(oRes.Data),
                         StatusType = "ÉXITO"
                     };
                 }
                 else if (oRes.ErrorCode == 50001)
                 {
-                    return new SingleResponse<TipoAlmacenCrearRE>
+                    return new SingleResponse<ProductoCrearRE>
                     {
                         StatusCode = 400,
                         Data = null,
@@ -236,7 +237,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
                 }
                 else
                 {
-                    return new SingleResponse<TipoAlmacenCrearRE>
+                    return new SingleResponse<ProductoCrearRE>
                     {
                         StatusCode = 500,
                         Data = null,
@@ -247,8 +248,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar crear el tipo de almacen.");
-                return new SingleResponse<TipoAlmacenCrearRE>
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar crear el producto.");
+                return new SingleResponse<ProductoCrearRE>
                 {
                     StatusCode = 500,
                     StatusType = "BACKEND-ERROR",
@@ -261,7 +262,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
         {
             try
             {
-                var oRes = await _TipoAlmacenRepoC.Eliminar(id);
+                var oRes = await _productosRepoC.Eliminar(id);
 
                 if (oRes.ErrorCode == 0)
                 {
@@ -295,7 +296,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar eliminar el tipo de almacen.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar eliminar el producto.");
                 return new SingleResponse<bool>
                 {
                     StatusCode = 500,
