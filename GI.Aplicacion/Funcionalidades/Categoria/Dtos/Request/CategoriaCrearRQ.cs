@@ -8,6 +8,6 @@ namespace GI.Aplicacion.Funcionalidades.Categoria.Dtos.Request
 {
     public class CategoriaCrearRQ
     {
-        public string nombre { get; set; } = string.Empty;
+        public string nombre { get; set; }
     }
 }

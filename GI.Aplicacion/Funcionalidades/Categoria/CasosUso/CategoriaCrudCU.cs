@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using GI.Aplicacion.Funcionalidades.Categoria.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.Categoria.Dtos.Response;
 using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
@@ -7,7 +8,9 @@ using GI.Dominio.Entidades;
 using GI.Dominio.Interfaces.Commands;
 using GI.Dominio.Interfaces.Querys;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -23,7 +26,9 @@ namespace GI.Aplicacion.Funcionalidades.Categoria.CasosUso
         ICategoriaRepositorioC categoriaRepositoryC,
         IMapper mapper, 
         ILogger<CategoriaCrudCU> logger,
-        IAuditoriaHelp audiHelp) : ICategoriaCrudCU
+        IAuditoriaHelp audiHelp,
+        IValidator<CategoriaCrearRQ> validatorCrear
+        ) : ICategoriaCrudCU
     {
 
         private readonly ICategoriaRepositorioQ _categoriaRepoQ = categoriaRepositoryQ;
@@ -31,6 +36,7 @@ namespace GI.Aplicacion.Funcionalidades.Categoria.CasosUso
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<CategoriaCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
+        private readonly IValidator<CategoriaCrearRQ> _validatorCrear = validatorCrear;
 
         public async Task<SingleResponse<CategoriaActualizarRE>> Actualizar(int id, CategoriaActualizarRQ oRegistro)
         {
@@ -198,50 +204,57 @@ namespace GI.Aplicacion.Funcionalidades.Categoria.CasosUso
                 throw new ArgumentNullException(nameof(oRegistro));
             }
 
+            var validationResult = await _validatorCrear.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<CategoriaCrearRE>
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Data = null,
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage)),
+                    StatusType = "VALIDACION"
+                };
+            }
+
             try
             {
                 var CategoriaEn = _mapper.Map<CategoriaEN>(oRegistro);
                 CategoriaEn.C_Usuario_Creacion = _audiHelp.UserName;
+
                 var oRes = await _categoriaRepoC.Crear(CategoriaEn);
 
-                if (oRes.ErrorCode == 0)
+                return oRes.ErrorCode switch
                 {
-                    return new SingleResponse<CategoriaCrearRE>
+                    0 => new SingleResponse<CategoriaCrearRE>
                     {
-                        StatusCode = 200,
+                        StatusCode = StatusCodes.Status200OK,
                         Data = _mapper.Map<CategoriaCrearRE>(oRes.Data),
                         StatusType = "ÉXITO"
-                    };
-                }
-                else if (oRes.ErrorCode == 50001)
-                {
-                    return new SingleResponse<CategoriaCrearRE>
+                    },
+                    50001 => new SingleResponse<CategoriaCrearRE>
                     {
-                        StatusCode = 400,
+                        StatusCode = StatusCodes.Status400BadRequest,
                         Data = null,
                         StatusMessage = oRes.StatusMessage,
                         StatusType = oRes.StatusType
-                    };
-                }
-                else
-                {
-                    return new SingleResponse<CategoriaCrearRE>
+                    },
+                    _ => new SingleResponse<CategoriaCrearRE>
                     {
-                        StatusCode = 500,
+                        StatusCode = StatusCodes.Status500InternalServerError,
                         Data = null,
                         StatusMessage = oRes.ErrorMessage,
                         StatusType = oRes.StatusType
-                    };
-                }
+                    }
+                };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar crear la Categoria.");
                 return new SingleResponse<CategoriaCrearRE>
                 {
-                    StatusCode = 500,
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     StatusType = "BACKEND-ERROR",
-                    StatusMessage = "Error de BackEnd, comunicarse con el encargado de este microservicio."
+                    StatusMessage = "Error en el servidor. Comuníquese con el encargado de este microservicio."
                 };
             }
         }

@@ -73,14 +73,14 @@ namespace GI.Infraestructura.Repositorios.Querys
             }
             catch (SqlException exsql)
             {
-                _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al intentar consultar las Tipo de Almacenes.", exsql.Number);
+                _logger.LogError(exsql, "SQL Error ({ErrorCode}): Ocurrió una excepción SQL al intentar consultar los Almacenes.", exsql.Number);
                 oResp.ErrorCode = exsql.Number;
                 oResp.ErrorMessage = "Error de base de datos, contactar con el administrador del sistema.";
                 oResp.StatusType = "SQL-ERROR";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al intentar consultar las Tipo de Almacenes.");
+                _logger.LogError(ex, "Backend Error (50100): Ocurrió una excepción en C# al intentar consultar los Almacenes.");
                 oResp.ErrorCode = 50100;
                 oResp.ErrorMessage = "Error de BackEnd, comunicarse con el encargado de este microservicio.";
                 oResp.StatusType = "BACKEND-ERROR";

@@ -87,7 +87,8 @@ namespace GI.Infraestructura.Repositorios.Commands
 
             DynamicParameters objParam = Utilitarios.GenerarParametros(new
             {
-                IC_Nombre = oUnidadMedida.C_Nombre,                
+                IC_Nombre = oUnidadMedida.C_Nombre,
+                IC_Codigo = oUnidadMedida.C_Codigo,
                 IC_Usuario_Creacion = oUnidadMedida.C_Usuario_Creacion
             });
 

@@ -3,5 +3,6 @@
     public class UnidadMedidaCrearRQ
     {
         public string nombre { set; get; }
+        public string codigo { set; get; }
     }
 }

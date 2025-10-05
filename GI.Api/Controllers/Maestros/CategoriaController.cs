@@ -1,6 +1,7 @@
 ﻿using GI.Aplicacion.Funcionalidades.Categoria.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 
 namespace GI.Api.Controllers.Maestros
 {
@@ -17,8 +18,12 @@ namespace GI.Api.Controllers.Maestros
 
         #region Querys
         [HttpGet("")]
-        public async Task<IActionResult> Consultar(CategoriaConsultarRQ oFiltro)
+        public async Task<IActionResult> Consultar([FromQuery] CategoriaConsultarRQ oFiltro)
         {
+            if (oFiltro == null)
+            {
+                return BadRequest(new { StatusType = "InvalidInput", StatusMessage = "El cuerpo de la peticion no puede ser nulo." });
+            }
 
             var oResult = await _categoriaCrudCU.Consultar(oFiltro);
 
@@ -33,6 +38,7 @@ namespace GI.Api.Controllers.Maestros
         [HttpGet("{id:int}")]
         public async Task<IActionResult> BuscarPorID(int id)
         {
+
             var oResult = await _categoriaCrudCU.BuscarPorID(id);
 
             return oResult.StatusCode switch

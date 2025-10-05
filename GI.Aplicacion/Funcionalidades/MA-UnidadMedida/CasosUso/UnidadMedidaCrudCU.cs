@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using GI.Aplicacion.Funcionalidades.Categoria.Dtos.Response;
 using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Dtos.Response;
 using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Validadores;
 using GI.Dominio.Comunes;
 using GI.Dominio.Entidades;
 using GI.Dominio.Interfaces.Commands;
 using GI.Dominio.Interfaces.Querys;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace GI.Aplicacion.Funcionalidades.MA_UnidadMedida.CasosUso
@@ -16,7 +20,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_UnidadMedida.CasosUso
           IUnidadMedidaRepositorioC UnidadMedidaRepositoryC,
           IMapper mapper,
           ILogger<UnidadMedidaCrudCU> logger,
-          IAuditoriaHelp audiHelp) : IUnidadMedidaCrudCU
+          IAuditoriaHelp audiHelp,
+          IValidator<UnidadMedidaCrearRQ> crearValidator) : IUnidadMedidaCrudCU
         
     {
 
@@ -25,6 +30,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_UnidadMedida.CasosUso
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<UnidadMedidaCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
+        private readonly IValidator<UnidadMedidaCrearRQ> _crearValidator = crearValidator;
 
         public async Task<SingleResponse<UnidadMedidaActualizarRE>> Actualizar(int id, UnidadMedidaActualizarRQ oRegistro)
         {
@@ -191,6 +197,20 @@ namespace GI.Aplicacion.Funcionalidades.MA_UnidadMedida.CasosUso
             {
                 throw new ArgumentNullException(nameof(oRegistro));
             }
+
+            var validationResult = await _crearValidator.ValidateAsync(oRegistro);
+
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<UnidadMedidaCrearRE>
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
+            }
+
 
             try
             {

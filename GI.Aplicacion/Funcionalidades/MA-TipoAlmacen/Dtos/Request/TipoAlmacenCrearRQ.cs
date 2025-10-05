@@ -2,7 +2,7 @@
 {
     public class TipoAlmacenCrearRQ
     {
-        public string nombre { set; get; }
-        public string descripcion { set; get; }
+        public string nombre { set; get; } = string.Empty;
+        public string descripcion { set; get; } = string.Empty;
     }
 }
