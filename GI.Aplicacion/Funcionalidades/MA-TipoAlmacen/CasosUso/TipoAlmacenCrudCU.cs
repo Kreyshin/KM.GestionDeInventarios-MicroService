@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Dtos.Response;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.Interfaces;
@@ -7,6 +8,7 @@ using GI.Dominio.Entidades;
 using GI.Dominio.Interfaces.Commands;
 using GI.Dominio.Interfaces.Querys;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
@@ -16,7 +18,9 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
           ITipoAlmacenRepositorioC TipoAlmacenRepositoryC,
           IMapper mapper,
           ILogger<TipoAlmacenCrudCU> logger,
-          IAuditoriaHelp audiHelp) : ITipoAlmacenCrudCU
+          IAuditoriaHelp audiHelp,
+          IValidator<TipoAlmacenCrearRQ> validatorCrear
+          ) : ITipoAlmacenCrudCU
         
     {
 
@@ -25,6 +29,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<TipoAlmacenCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
+        private readonly IValidator<TipoAlmacenCrearRQ> _validatorCrear = validatorCrear;
 
         public async Task<SingleResponse<TipoAlmacenActualizarRE>> Actualizar(int id, TipoAlmacenActualizarRQ oRegistro)
         {
@@ -72,7 +77,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar actualizar la TipoAlmacen.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar actualizar el tipo de almacen.");
                 return new SingleResponse<TipoAlmacenActualizarRE>
                 {
                     StatusCode = 500,
@@ -120,7 +125,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar buscar TipoAlmacen por ID.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar buscar el tipo de almacen por ID.");
                 return new SingleResponse<TipoAlmacenBuscarPorIDRE>
                 {
                     StatusCode = 500,
@@ -157,7 +162,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
                     return new ListResponse<TipoAlmacenConsultarRE>
                     {
                         StatusCode = 204,
-                        Data = null,
+                        Data = null!,
                         StatusMessage = oRes.StatusMessage,
                         StatusType = oRes.StatusType
                     };
@@ -167,7 +172,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
                     return new ListResponse<TipoAlmacenConsultarRE>
                     {
                         StatusCode = 500,
-                        Data = null,
+                        Data = null!,
                         StatusMessage = oRes.ErrorMessage,
                         StatusType = oRes.StatusType
                     };
@@ -190,6 +195,18 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _validatorCrear.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<TipoAlmacenCrearRE>
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try
@@ -230,7 +247,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar crear la TipoAlmacen.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar crear el tipo de almacen.");
                 return new SingleResponse<TipoAlmacenCrearRE>
                 {
                     StatusCode = 500,
@@ -278,7 +295,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar eliminar la TipoAlmacen.");
+                _logger.LogError(ex, $"{50200}: Ocurrio un exepcion(c#) al intentar eliminar el tipo de almacen.");
                 return new SingleResponse<bool>
                 {
                     StatusCode = 500,

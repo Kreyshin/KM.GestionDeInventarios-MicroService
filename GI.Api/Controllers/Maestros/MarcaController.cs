@@ -17,7 +17,7 @@ namespace GI.Api.Controllers.Maestros
 
         #region Querys
         [HttpGet("")]
-        public async Task<IActionResult> Consultar(MarcaConsultarRQ oFiltro)
+        public async Task<IActionResult> Consultar([FromQuery] MarcaConsultarRQ oFiltro)
         {
 
             var oResult = await _MarcaCrudCU.Consultar(oFiltro);

@@ -10,7 +10,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Mappers
         public UnidadMedidaCrudProfileAM()
         {
             CreateMap<UnidadMedidaCrearRQ, UnidadMedidaEN>()
-           .ForMember(dest => dest.C_Nombre, opt => opt.MapFrom(src => src.nombre));
+           .ForMember(dest => dest.C_Nombre, opt => opt.MapFrom(src => src.nombre))
+           .ForMember(dest => dest.C_Codigo, opt => opt.MapFrom(src => src.codigo));
 
             CreateMap<UnidadMedidaActualizarRQ, UnidadMedidaEN>()
                          .ForMember(dest => dest.C_Nombre, opt => opt.MapFrom(src => src.nombre))                        

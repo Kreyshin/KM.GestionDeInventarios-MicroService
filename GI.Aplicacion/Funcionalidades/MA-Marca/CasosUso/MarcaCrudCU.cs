@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Dtos.Response;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_UnidadMedida.Dtos.Response;
 using GI.Dominio.Comunes;
 using GI.Dominio.Entidades;
 using GI.Dominio.Interfaces.Commands;
 using GI.Dominio.Interfaces.Querys;
 using GS.Aplicacion.Comunes.AuditoriaHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso
@@ -16,7 +19,9 @@ namespace GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso
           IMarcaRepositorioC MarcaRepositoryC,
           IMapper mapper,
           ILogger<MarcaCrudCU> logger,
-          IAuditoriaHelp audiHelp) : IMarcaCrudCU
+          IAuditoriaHelp audiHelp,
+          IValidator<MarcaCrearRQ> validatorCrear
+          ) : IMarcaCrudCU
         
     {
 
@@ -25,6 +30,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<MarcaCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
+        private readonly IValidator<MarcaCrearRQ> _validatorCrear = validatorCrear;
 
         public async Task<SingleResponse<MarcaActualizarRE>> Actualizar(int id, MarcaActualizarRQ oRegistro)
         {
@@ -130,7 +136,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso
             }
         }
 
-        public async Task<ListResponse<MarcaConsultarRE>> Consultar(MarcaConsultarRQ oFiltro)
+        public async Task<ListResponse<MarcaConsultarRE>> Consultar( MarcaConsultarRQ oFiltro)
         {
             if (oFiltro == null)
             {
@@ -190,6 +196,18 @@ namespace GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _validatorCrear.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<MarcaCrearRE>
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try
