@@ -21,8 +21,9 @@ namespace GI.Aplicacion.Funcionalidades.MA_UnidadMedida.CasosUso
           IMapper mapper,
           ILogger<UnidadMedidaCrudCU> logger,
           IAuditoriaHelp audiHelp,
-          IValidator<UnidadMedidaCrearRQ> crearValidator) : IUnidadMedidaCrudCU
-        
+          IValidator<UnidadMedidaCrearRQ> crearValidator,
+          IValidator<UnidadMedidaActualizarRQ> actualizarValidator) : IUnidadMedidaCrudCU
+
     {
 
         private readonly IUnidadMedidaRepositorioQ _UnidadMedidaRepoQ = UnidadMedidaRepositoryQ;
@@ -31,12 +32,25 @@ namespace GI.Aplicacion.Funcionalidades.MA_UnidadMedida.CasosUso
         private readonly ILogger<UnidadMedidaCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
         private readonly IValidator<UnidadMedidaCrearRQ> _crearValidator = crearValidator;
+        private readonly IValidator<UnidadMedidaActualizarRQ> _actualizarValidator = actualizarValidator;
 
         public async Task<SingleResponse<UnidadMedidaActualizarRE>> Actualizar(int id, UnidadMedidaActualizarRQ oRegistro)
         {
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _actualizarValidator.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<UnidadMedidaActualizarRE>
+                {
+                    StatusCode = 400,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try

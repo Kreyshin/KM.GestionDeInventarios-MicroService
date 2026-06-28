@@ -25,7 +25,7 @@ namespace GI.Infraestructura.Repositorios.Querys
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
+                using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.QueryFirstOrDefaultAsync<ProductoEN>(
                     sql: "Sp_ProductosQ_BuscarPorID",
                     commandType: CommandType.StoredProcedure,
@@ -68,7 +68,7 @@ namespace GI.Infraestructura.Repositorios.Querys
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
+                using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.QueryAsync<ProductoEN>(
                    sql: "Sp_ProductosQ_Consultar",
                    commandType: CommandType.StoredProcedure,

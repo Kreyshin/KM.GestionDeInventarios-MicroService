@@ -19,7 +19,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_Productos.CasosUso
         IMapper mapper,
         ILogger<ProductoCrudCU> logger,
         IAuditoriaHelp audiHelp,
-        IValidator<ProductoCrearRQ> validatorCrear
+        IValidator<ProductoCrearRQ> validatorCrear,
+        IValidator<ProductoActualizarRQ> validatorActualizar
 
         ) : IProductosCrudCU
     {
@@ -30,6 +31,7 @@ namespace GI.Aplicacion.Funcionalidades.MA_Productos.CasosUso
         private readonly ILogger<ProductoCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
         private readonly IValidator<ProductoCrearRQ> _validatorCrear = validatorCrear;
+        private readonly IValidator<ProductoActualizarRQ> _validatorActualizar = validatorActualizar;
 
 
         public async Task<SingleResponse<ProductoActualizarRE>> Actualizar(int id, ProductoActualizarRQ oRegistro)
@@ -37,6 +39,18 @@ namespace GI.Aplicacion.Funcionalidades.MA_Productos.CasosUso
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _validatorActualizar.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<ProductoActualizarRE>
+                {
+                    StatusCode = 400,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try

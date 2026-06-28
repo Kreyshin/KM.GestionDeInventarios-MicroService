@@ -19,7 +19,8 @@ namespace GI.Aplicacion.Funcionalidades.MA_Almacenes.CasosUso
         IMapper mapper,
         ILogger<AlmacenCrudCU> logger,
         IAuditoriaHelp audiHelp,
-        IValidator<AlmacenCrearRQ> validatorCrear
+        IValidator<AlmacenCrearRQ> validatorCrear,
+        IValidator<AlmacenActualizarRQ> validatorActualizar
         ) : IAlmacenesCrudCU
     {
 
@@ -29,12 +30,25 @@ namespace GI.Aplicacion.Funcionalidades.MA_Almacenes.CasosUso
         private readonly ILogger<AlmacenCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
         private readonly IValidator<AlmacenCrearRQ> _crearValidator = validatorCrear;
+        private readonly IValidator<AlmacenActualizarRQ> _validatorActualizar = validatorActualizar;
 
         public async Task<SingleResponse<AlmacenActualizarRE>> Actualizar(int id, AlmacenActualizarRQ oRegistro)
         {
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _validatorActualizar.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<AlmacenActualizarRE>
+                {
+                    StatusCode = 400,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try

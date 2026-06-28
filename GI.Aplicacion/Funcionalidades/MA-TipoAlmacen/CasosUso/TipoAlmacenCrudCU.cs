@@ -19,9 +19,10 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
           IMapper mapper,
           ILogger<TipoAlmacenCrudCU> logger,
           IAuditoriaHelp audiHelp,
-          IValidator<TipoAlmacenCrearRQ> validatorCrear
+          IValidator<TipoAlmacenCrearRQ> validatorCrear,
+          IValidator<TipoAlmacenActualizarRQ> validatorActualizar
           ) : ITipoAlmacenCrudCU
-        
+
     {
 
         private readonly ITipoAlmacenRepositorioQ _TipoAlmacenRepoQ = TipoAlmacenRepositoryQ;
@@ -30,12 +31,25 @@ namespace GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso
         private readonly ILogger<TipoAlmacenCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
         private readonly IValidator<TipoAlmacenCrearRQ> _validatorCrear = validatorCrear;
+        private readonly IValidator<TipoAlmacenActualizarRQ> _validatorActualizar = validatorActualizar;
 
         public async Task<SingleResponse<TipoAlmacenActualizarRE>> Actualizar(int id, TipoAlmacenActualizarRQ oRegistro)
         {
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _validatorActualizar.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<TipoAlmacenActualizarRE>
+                {
+                    StatusCode = 400,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try

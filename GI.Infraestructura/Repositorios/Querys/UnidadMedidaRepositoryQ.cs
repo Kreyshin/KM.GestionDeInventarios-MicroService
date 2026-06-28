@@ -25,7 +25,7 @@ namespace GI.Infraestructura.Repositorios.Querys
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
+                using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.QueryFirstOrDefaultAsync<UnidadMedidaEN>(
                     sql: "Sp_UnidadMedidaQ_BuscarPorID",
                     commandType: CommandType.StoredProcedure,
@@ -63,7 +63,7 @@ namespace GI.Infraestructura.Repositorios.Querys
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
+                using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.QueryAsync<UnidadMedidaEN>(
                    sql: "Sp_UnidadMedidaQ_Consultar",
                    commandType: CommandType.StoredProcedure,

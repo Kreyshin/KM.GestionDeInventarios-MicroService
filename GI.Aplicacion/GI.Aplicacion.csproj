@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GI.Dominion\GI.Dominio.csproj" />
+    <ProjectReference Include="..\GI.Infraestructura\GI.Infraestructura.csproj" />
   </ItemGroup>
 
 </Project>

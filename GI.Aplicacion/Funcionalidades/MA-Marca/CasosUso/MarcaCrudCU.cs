@@ -20,9 +20,10 @@ namespace GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso
           IMapper mapper,
           ILogger<MarcaCrudCU> logger,
           IAuditoriaHelp audiHelp,
-          IValidator<MarcaCrearRQ> validatorCrear
+          IValidator<MarcaCrearRQ> validatorCrear,
+          IValidator<MarcaActualizarRQ> validatorActualizar
           ) : IMarcaCrudCU
-        
+
     {
 
         private readonly IMarcaRepositorioQ _MarcaRepoQ = MarcaRepositoryQ;
@@ -31,12 +32,25 @@ namespace GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso
         private readonly ILogger<MarcaCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
         private readonly IValidator<MarcaCrearRQ> _validatorCrear = validatorCrear;
+        private readonly IValidator<MarcaActualizarRQ> _validatorActualizar = validatorActualizar;
 
         public async Task<SingleResponse<MarcaActualizarRE>> Actualizar(int id, MarcaActualizarRQ oRegistro)
         {
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _validatorActualizar.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<MarcaActualizarRE>
+                {
+                    StatusCode = 400,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try

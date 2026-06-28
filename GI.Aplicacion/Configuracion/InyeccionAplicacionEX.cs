@@ -4,12 +4,19 @@ using GI.Aplicacion.Funcionalidades.Categoria.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.Categoria.Interfacess;
 using GI.Aplicacion.Funcionalidades.Categoria.Mappers;
 using GI.Aplicacion.Funcionalidades.Categoria.Validadores;
+using GI.Aplicacion.Funcionalidades.MA_Almacenes.CasosUso;
+using GI.Aplicacion.Funcionalidades.MA_Almacenes.Dtos.Request;
+using GI.Aplicacion.Funcionalidades.MA_Almacenes.Interfaces;
+using GI.Aplicacion.Funcionalidades.MA_Almacenes.Mappers;
+using GI.Aplicacion.Funcionalidades.MA_Almacenes.Validadores;
 using GI.Aplicacion.Funcionalidades.MA_Marca.CasosUso;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Dtos.Request;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Interfaces;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Mappers;
 using GI.Aplicacion.Funcionalidades.MA_Marca.Validadores;
+using GI.Aplicacion.Funcionalidades.MA_Productos.CasosUso;
 using GI.Aplicacion.Funcionalidades.MA_Productos.Dtos.Request;
+using GI.Aplicacion.Funcionalidades.MA_Productos.Interfaces;
 using GI.Aplicacion.Funcionalidades.MA_Productos.Mappers;
 using GI.Aplicacion.Funcionalidades.MA_Productos.Validadores;
 using GI.Aplicacion.Funcionalidades.MA_TipoAlmacen.CasosUso;
@@ -37,11 +44,20 @@ namespace GI.Aplicacion.Configuracion
             services.AddScoped<ITipoAlmacenCrudCU, TipoAlmacenCrudCU>();
             services.AddScoped<IUnidadMedidaCrudCU, UnidadMedidaCrudCU>();
             services.AddScoped<IMarcaCrudCU, MarcaCrudCU>();
+            services.AddScoped<IProductosCrudCU, ProductoCrudCU>();
+            services.AddScoped<IAlmacenesCrudCU, AlmacenCrudCU>();
             services.AddScoped<IValidator<UnidadMedidaCrearRQ>, UnidadMedidaCrearRQValidator>();
+            services.AddScoped<IValidator<UnidadMedidaActualizarRQ>, UnidadMedidaActualizarRQValidator>();
             services.AddScoped<IValidator<CategoriaCrearRQ>, CateogoriaCrearRQValidator>();
+            services.AddScoped<IValidator<CategoriaActualizarRQ>, CategoriaActualizarRQValidator>();
             services.AddScoped<IValidator<MarcaCrearRQ>, MarcaCrearRQValidator>();
+            services.AddScoped<IValidator<MarcaActualizarRQ>, MarcaActualizarRQValidator>();
             services.AddScoped<IValidator<TipoAlmacenCrearRQ>, TipoAlmacenCrearRQValidator>();
+            services.AddScoped<IValidator<TipoAlmacenActualizarRQ>, TipoAlmacenActualizarRQValidator>();
             services.AddScoped<IValidator<ProductoCrearRQ>, ProductoCrearRQValidator>();
+            services.AddScoped<IValidator<ProductoActualizarRQ>, ProductoActualizarRQValidator>();
+            services.AddScoped<IValidator<AlmacenCrearRQ>, AlmacenCrearRQValidator>();
+            services.AddScoped<IValidator<AlmacenActualizarRQ>, AlmacenActualizarRQValidator>();
 
             services.AddAutoMapper(
                    typeof(CategoriaCrudProfileAM).Assembly,
