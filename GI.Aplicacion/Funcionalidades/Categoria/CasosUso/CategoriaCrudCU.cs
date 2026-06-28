@@ -27,7 +27,8 @@ namespace GI.Aplicacion.Funcionalidades.Categoria.CasosUso
         IMapper mapper, 
         ILogger<CategoriaCrudCU> logger,
         IAuditoriaHelp audiHelp,
-        IValidator<CategoriaCrearRQ> validatorCrear
+        IValidator<CategoriaCrearRQ> validatorCrear,
+        IValidator<CategoriaActualizarRQ> validatorActualizar
         ) : ICategoriaCrudCU
     {
 
@@ -37,12 +38,25 @@ namespace GI.Aplicacion.Funcionalidades.Categoria.CasosUso
         private readonly ILogger<CategoriaCrudCU> _logger = logger;
         private readonly IAuditoriaHelp _audiHelp = audiHelp;
         private readonly IValidator<CategoriaCrearRQ> _validatorCrear = validatorCrear;
+        private readonly IValidator<CategoriaActualizarRQ> _validatorActualizar = validatorActualizar;
 
         public async Task<SingleResponse<CategoriaActualizarRE>> Actualizar(int id, CategoriaActualizarRQ oRegistro)
         {
             if (oRegistro == null)
             {
                 throw new ArgumentNullException(nameof(oRegistro));
+            }
+
+            var validationResult = await _validatorActualizar.ValidateAsync(oRegistro);
+            if (!validationResult.IsValid)
+            {
+                return new SingleResponse<CategoriaActualizarRE>
+                {
+                    StatusCode = 400,
+                    Data = null,
+                    StatusType = "VALIDACION",
+                    StatusMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage))
+                };
             }
 
             try

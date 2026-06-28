@@ -30,7 +30,7 @@ namespace GI.Infraestructura.Repositorios.Querys
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
+                using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.QueryFirstOrDefaultAsync<AlmacenEN>(
                     sql: "Sp_AlmacenesQ_BuscarPorID",
                     commandType: CommandType.StoredProcedure,
@@ -71,9 +71,9 @@ namespace GI.Infraestructura.Repositorios.Querys
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
+                using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.QueryAsync<AlmacenEN>(
-                   sql: "Sp_TipoAlmacenQ_Consultar",
+                   sql: "Sp_AlmacenesQ_Consultar",
                    commandType: CommandType.StoredProcedure,
                    param: parametros
                 );

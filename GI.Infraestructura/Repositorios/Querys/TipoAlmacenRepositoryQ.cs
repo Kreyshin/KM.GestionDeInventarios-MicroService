@@ -4,6 +4,7 @@ using GI.Dominio.Entidades;
 using GI.Dominio.Interfaces.Querys;
 using GI.Infraestructura.Comunes;
 using GI.Infraestructura.Persistencia;
+using GI.Infraestructura.Persistencia.DTOs;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -25,7 +26,7 @@ namespace GI.Infraestructura.Repositorios.Querys
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
+                using var connection = _dbConexion.CrearConexion;
                 oResp.Data = await connection.QueryFirstOrDefaultAsync<TipoAlmacenEN>(
                     sql: "Sp_TipoAlmacenQ_BuscarPorID",
                     commandType: CommandType.StoredProcedure,
@@ -52,20 +53,20 @@ namespace GI.Infraestructura.Repositorios.Querys
             return oResp;
         }
 
-        public async Task<ListResponse<TipoAlmacenEN>> Consultar(TipoAlmacenEN flt)
+        public async Task<ListResponse<TipoAlmacenQueryDTO>> Consultar(TipoAlmacenEN flt)
         {
-            ListResponse<TipoAlmacenEN> oResp = new();
+            ListResponse<TipoAlmacenQueryDTO> oResp = new();
             DynamicParameters parametros = Utilitarios.GenerarParametros(new
             {
+                IC_CODIGO = flt.C_Codigo,
                 IC_Nombre = flt.C_Nombre,
-                IC_Descripcion = flt.C_Descripcion,
-                IC_Estado = flt.C_Estado,
+                ID_Estado = flt.ID_Estado,
             });
 
             try
             {
-                IDbConnection connection = _dbConexion.CrearConexion;
-                oResp.Data = await connection.QueryAsync<TipoAlmacenEN>(
+                using var connection = _dbConexion.CrearConexion;
+                oResp.Data = await connection.QueryAsync<TipoAlmacenQueryDTO>(
                    sql: "Sp_TipoAlmacenQ_Consultar",
                    commandType: CommandType.StoredProcedure,
                    param: parametros

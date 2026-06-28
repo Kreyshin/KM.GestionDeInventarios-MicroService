@@ -26,7 +26,7 @@ namespace GI.Api.Controllers.Maestros
             {
                 200 => Ok(new { oResult.Data, oResult.StatusType, oResult.StatusMessage }),
                 204 => NoContent(),               
-                _ => StatusCode(500, new { oResult.StatusMessage })
+                _ => StatusCode(500, new { oResult.StatusType, oResult.StatusMessage })
             };
         }
 
@@ -39,7 +39,7 @@ namespace GI.Api.Controllers.Maestros
             {
                 200 => Ok(new { oResult.Data, oResult.StatusType, oResult.StatusMessage }),
                 204 => NoContent(),
-                _ => StatusCode(500, new { oResult.StatusMessage })
+                _ => StatusCode(500, new { oResult.StatusType, oResult.StatusMessage })
             };
         }
         #endregion
@@ -78,7 +78,7 @@ namespace GI.Api.Controllers.Maestros
             {
                 200 => Ok(new { oResult.Data, oResult.StatusType, oResult.StatusMessage }),
                 400 => BadRequest(new { oResult.StatusType, oResult.StatusMessage }),
-                _ => StatusCode(500, new { oResult.StatusMessage })
+                _ => StatusCode(500, new { oResult.StatusType, oResult.StatusMessage })
             };
         }
 
@@ -93,7 +93,7 @@ namespace GI.Api.Controllers.Maestros
             {
                 200 => Ok(new { oResult.Data, oResult.StatusType, oResult.StatusMessage }),
                 400 => BadRequest(new { oResult.StatusType, oResult.StatusMessage }),
-                _ => StatusCode(500, new { oResult.StatusMessage })
+                _ => StatusCode(500, new { oResult.StatusType, oResult.StatusMessage })
             };
 
         }

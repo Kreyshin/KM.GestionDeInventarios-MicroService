@@ -9,7 +9,7 @@ namespace GI.Aplicacion.Funcionalidades.Categoria.Validadores
         {
             RuleFor(x => x.nombre)
                 .NotEmpty().WithMessage("El campo 'nombre' es obligatorio.")
-                .MaximumLength(300).WithMessage("El nombre de la categoría no puede exceder los 100 caracteres.");
+                .MaximumLength(300).WithMessage("El nombre de la categoría no puede exceder los 300 caracteres.");
         }
     }
 }
